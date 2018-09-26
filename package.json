@@ -1,0 +1,20 @@
+{
+  "name": "swift-pig",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "chokidar": "^2.0.4",
+    "fs-extra": "^7.0.0",
+    "image-size": "^0.6.3",
+    "live-server": "^1.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {},
+  "bin": {
+    "swpg": "./index.js"
+  },
+  "repository": "",
+  "author": "Jake",
+  "license": "MIT"
+}

@@ -1,0 +1,14 @@
+const infoBox = require('./templates/infobox.js.html');
+module.exports = (d,i) => { return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <link rel="stylesheet" href="styles.css">
+  <title>${d.title}</title>
+</head>
+<body>
+  ${d.cats.map(info => infoBox(info,info.img)}
+</main>
+</body>
+</html>`}

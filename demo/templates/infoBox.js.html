@@ -1,0 +1,11 @@
+const image(i,fp) => `<img src="${i[fp].src}" width="${i[fp].width}" height="${i[fp].height}"/>`
+module.exports = (d,i) => { return `
+<ul>
+  <li>${d.name}</li>
+  <li>${d.description}</li>
+  <li>${d.about}</li>
+  <li>${image(i,'cat-1.jpg')}</li>
+</ul>`
+module.exports = () => { return `
+<!DOCTYPE html>
+<html lang="en">

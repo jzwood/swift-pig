@@ -1,0 +1,14 @@
+{
+  title: "Tiger, tiger",
+  cats: [{
+    name: "Samson",
+    description: "long haired Maine coon",
+    about: "found abandoned in a cardboard box by the freeway",
+    image: "samson.jpg"
+  }, {
+    name: "Delilah",
+    description: "short haired tabby",
+    about: "stubborn and likes to knead people's heads",
+    image: "delilah.jpg"
+  }]
+}

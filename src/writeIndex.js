@@ -1,22 +1,28 @@
+const fs = require('fs-extra')
+const path = require('path')
+
 //renders templates and saves as index.html
-module.exports = async ({entryPath, content, imageData, distPath, buildCache}) => {
+module.exports = async ({entryPath, content, imageData, distPath, cachedBuild}) => {
   const INFIX = '.js.'
-  if(!entryPath.contains(INFIX)) {
+  if(!entryPath.includes(INFIX)) {
     throw `Templates must contain ${INFIX} in name. Not found in entry template: ${entryPath}`
   }
-  const renderIndex = require(entryPath)
-  const index = renderIndex(content, imageData)
-  if (index !== cachedHTML) {
-    cachedHTML = index
-    const ii = entryPath.lastIndexOf(EXT)
-    const buildPath = path.join(distPath, path.basename(entryPath).slice(ii, ii + INFIX.length))
-    //write local index that references local images
-    await fs.writeFile(buildPath, index)
+  const renderIndex = require(`./${path.relative(__dirname, entryPath)}`)
 
+  const index = renderIndex(content, imageData)
+  if (index !== cachedBuild) {
+    cachedBuild = index
+    const basePath = path.basename(entryPath)
+    const ii = basePath.lastIndexOf(INFIX)
+    const file = basePath.slice(0,ii) + '.' + basePath.slice(ii + INFIX.length)
+    console.log(distPath, file, basePath)
+    const buildPath = path.join(distPath, file)
+    //write local index that references local images
+    await fs.writeFile(`./${buildPath}`, index)
     console.info(`\x1b[32m SAVED:\x1b[0m\t${buildPath}`)
     //write local index in ic directory that referenes remote images
   } else {
     console.log(`File ${entryPath} not saved!`)
   }
-  return cachedHTML
+  return cachedBuild
 }

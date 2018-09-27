@@ -78,7 +78,7 @@ The entry template is the base template file you want to render.
 **index.js.html**
 ```html
 const infoBox = require('./templates/infobox.js.html');
-module.exports = (d,i) => { return `
+module.exports = (d,i) => `
 <!DOCTYPE html>
 <html>
 <head>
@@ -90,13 +90,13 @@ module.exports = (d,i) => { return `
   ${infoBox(d,i)}
 </main>
 </body>
-</html>`}
+</html>`
 ```
 
 **infoBox.js.html**
 ```html
 const image(i,fp) => `<img src="${i[fp].src}" width="${i[fp].width}" height="${i[fp].height}"/>`
-module.exports = (d,i) => { return `
+module.exports = (d,i) => `
 <ul>
   <li>${d.name}</li>
   <li>${d.description}</li>

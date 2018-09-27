@@ -1,4 +1,5 @@
 const chokidar = require('chokidar')
+const getData = require('./getData')
 const writeIndex = require('./writeIndex')
 
 module.exports = async (data, cachedBuild) => {
@@ -8,7 +9,7 @@ module.exports = async (data, cachedBuild) => {
   })
   console.log('watching...')
   let build = cachedBuild
-  watcher.on('change', (filepath, stats) => {
+  watcher.on('change', async (filepath, stats) => {
     console.log(`\x1b[35m UPDATED:\x1b[0m\t${filepath}`)
     getData.content(filepath)
     build = await writeIndex(data, build)

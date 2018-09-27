@@ -1,38 +1,42 @@
-#! /usr/bin/env node
-
-const swpg = require('./swift-pig')
 const fs = require('fs-extra')
-const imgFlag = '--img='
-const distFlag = '--out='
-const usage = `
-$ swpg <entry_path> <data_path> [${imgFlag}<image_path>] [${distFlag}<dist_path>] [-w | --watch]
-$ swpg -h | --help
-`
+const path = require('path')
+const liveServer = require('live-server')
 
-const exit = (message) => {
-  console.error(message)
-  process.exit(1)
+const getData = require('./src/getData')
+const watch = require('./src/watch')
+const writeIndex = require('./src/writeIndex')
+
+async function build(entryPath, dataPath, imgPath, distPath, watching) {
+console.log(entryPath, dataPath, imgPath, distPath, watching)
+  try {
+    const content = getData.content(dataPath)
+    const imageData = imgPath && (await getData.images(imgPath)) || {}
+
+    await fs.ensureDir(distPath)
+    const data = {
+      entryPath,
+      content,
+      imageData,
+      distPath,
+      watching
+    }
+    const build = await writeIndex(data)
+
+    if (watching) {
+      const params = {
+        port: 3000,
+        host: 'localhost',
+        root: '.',
+        open: false, // When false, it won't load your browser by default.
+        logLevel: 1 // 0 = errors only, 1 = some, 2 = lots
+      }
+
+      watch(data, build)
+      liveServer.start(params)
+    }
+  } catch (err) {
+    console.error(err)
+  }
 }
 
-const args = [...process.argv]
-
-if(args[1] === '-h' || args[1] === '--help') {
-  console.info(usage)
-  process.exit(0)
-}
-
-const [_, entryPath, dataPath, flag1, flag2, flag3] = args
-
-if(args.length < 3) exit(`Expected 3 or more parameters. Recieved ${args.length}.`)
-if(!fs.pathExistsSync(entryPath)) exit(`Entry path does not exist: ${entryPath}`)
-if(!fs.pathExistsSync(dataPath)) exit(`Data path does not exist: ${dataPath}`)
-
-const flags = [flag1, flag2, flag3]
-
-const parseFlags = (flags, flagPrefix) => (flags.filter(f => f.startsWith(imgFlag))[0] || '').replace(imgFlag,'')
-
-const imagePath = parseFlags(flags, imgFlag)
-const distPath = parseFlags(flags, distFlag)
-const watch = flags.include('-w') || flags.include('--watch')
-
-swpg(entryPath, dataPath, imagePath, distPath, watch)
+module.exports = build

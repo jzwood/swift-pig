@@ -3,7 +3,7 @@ const path = require('path')
 const sizeOf = require('image-size')
 
 module.exports.images = async imagePath => {
-  const IMG_PATTERN = /\.(jpg|gif|png)$/
+  const IMG_PATTERN = /\.(jpg|gif|png|jpeg)$/
   return (await fs.readdir(imagePath))
     .filter(file => IMG_PATTERN.test(file))
     .reduce((imgCache, file) => {
@@ -12,10 +12,11 @@ module.exports.images = async imagePath => {
         console.warn(`Duplicate image name: ${key}`)
         return imgCache
       } else {
-        const { width, height } = sizeOf(file)
+        const filePath = path.join(imagePath, file)
+        const { width, height } = sizeOf(filePath)
         return Object.assign(imgCache, {
           [key]: {
-            src: path.relative(config.dist, file),
+            src: filePath,
             width,
             height
           }
@@ -26,5 +27,5 @@ module.exports.images = async imagePath => {
 
 module.exports.content = dataPath => {
   delete require.cache[path.resolve(dataPath)]
-  return require(dataPath)
+  return require(`./${path.relative(__dirname, dataPath)}`)
 }

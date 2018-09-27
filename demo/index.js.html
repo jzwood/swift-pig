@@ -1,5 +1,5 @@
-const infoBox = require('./templates/infobox.js.html');
-module.exports = (d,i) => { return `
+const infoBox = require('./templates/infoBox.js.html');
+module.exports = (d,i) => `
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +8,7 @@ module.exports = (d,i) => { return `
   <title>${d.title}</title>
 </head>
 <body>
-  ${d.cats.map(info => infoBox(info,info.img)}
+  ${d.cats.map(info => infoBox(info,i,info.image)).join('')}
 </main>
 </body>
-</html>`}
+</html>`

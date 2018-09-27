@@ -1,0 +1,14 @@
+{
+  "INFIX": ".js.",
+  "PATTERN": {
+    "IMG": "\\.(jpg|gif|png|jpeg)$"
+  },
+  "PARAMS": {
+    "port": 3000,
+    "host": "localhost",
+    "ignore": "node_modules",
+    "root": ".",
+    "open": false,
+    "logLevel": 1
+  }
+}

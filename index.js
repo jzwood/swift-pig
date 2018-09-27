@@ -6,32 +6,29 @@ const getData = require('./src/getData')
 const watch = require('./src/watch')
 const writeIndex = require('./src/writeIndex')
 
+const CONSTANT = require('./src/constant.json')
+
 async function build(entryPath, dataPath, imgPath, distPath, watching) {
-console.log(entryPath, dataPath, imgPath, distPath, watching)
   try {
     const content = getData.content(dataPath)
-    const imageData = imgPath && (await getData.images(imgPath)) || {}
+    const imageData = imgPath && (await getData.images({imgPath, distPath})) || {}
 
     await fs.ensureDir(distPath)
-    const data = {
+    const config = {
       entryPath,
-      content,
-      imageData,
+      dataPath,
+      imgPath,
       distPath,
-      watching
+      watching,
+      content,
+      imageData
     }
-    const build = await writeIndex(data)
+    const build = await writeIndex(config)
 
     if (watching) {
-      const params = {
-        port: 3000,
-        host: 'localhost',
-        root: '.',
-        open: false, // When false, it won't load your browser by default.
-        logLevel: 1 // 0 = errors only, 1 = some, 2 = lots
-      }
-
-      watch(data, build)
+      watch(config, build)
+      const params = CONSTANT.PARAMS
+      Object.assign(params, {watch: getData.imports})
       liveServer.start(params)
     }
   } catch (err) {

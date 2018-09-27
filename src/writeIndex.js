@@ -1,11 +1,12 @@
 const fs = require('fs-extra')
 const path = require('path')
 
-//renders templates and saves as index.html
-module.exports = async ({entryPath, content, imageData, distPath, cachedBuild}) => {
-  const INFIX = '.js.'
-  if(!entryPath.includes(INFIX)) {
-    throw `Templates must contain ${INFIX} in name. Not found in entry template: ${entryPath}`
+const CONSTANT = require('./constant')
+
+module.exports = async ({entryPath, content, imageData, distPath}, cachedBuild='') => {
+  const infix = CONSTANT.INFIX
+  if(!entryPath.includes(infix)) {
+    throw `Templates must contain ${infix} in name. Not found in entry template: ${entryPath}`
   }
   const renderIndex = require(`./${path.relative(__dirname, entryPath)}`)
 
@@ -13,9 +14,8 @@ module.exports = async ({entryPath, content, imageData, distPath, cachedBuild}) 
   if (index !== cachedBuild) {
     cachedBuild = index
     const basePath = path.basename(entryPath)
-    const ii = basePath.lastIndexOf(INFIX)
-    const file = basePath.slice(0,ii) + '.' + basePath.slice(ii + INFIX.length)
-    console.log(distPath, file, basePath)
+    const ii = basePath.lastIndexOf(infix)
+    const file = basePath.slice(0,ii) + '.' + basePath.slice(ii + infix.length)
     const buildPath = path.join(distPath, file)
     //write local index that references local images
     await fs.writeFile(`./${buildPath}`, index)

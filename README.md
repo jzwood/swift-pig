@@ -116,4 +116,6 @@ I haven't uploaded Swift-pig to a package manager yet so if you want to use it l
 
 `$ git clone https://github.com/jzwood/swift-pig.git && cd swift-pig && yarn install && yarn link`
 
+## LICENCE
 
+MIT

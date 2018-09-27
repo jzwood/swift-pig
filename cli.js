@@ -1,8 +1,8 @@
 #! /usr/bin/env node
 
+const process = require('process')
 const swpg = require('./index')
 const fs = require('fs-extra')
-const process = require('process')
 const imgFlag = '--img='
 const distFlag = '--out='
 const usage = `

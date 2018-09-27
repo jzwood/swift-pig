@@ -1,14 +1,13 @@
 # Swift-Pig
 
-is a quick-and-dirty templating micro-framework CLI.
+is a quick-and-dirty static templating command line utility.
 
-
-<!--![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=for-the-badge)-->
+![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=for-the-badge)
 
 ## usage
 
 ```shell
-$ swpg <entry_path> <data_path> [--imgs=<image_path>] [--out=<dist_path>] [-w | --watch]
+$ swpg <entry_path> <data_path> [--img=<image_path>] [--out=<dist_path>] [-w | --watch]
 ```
 
 **examples**
@@ -57,15 +56,15 @@ images/
 **image data**
 ```json
 {
-  cat-1.jpg : {
-    src: "rel/path/to/cat-1.jpg",
-    width: "640px",
-    height: "426px"
+  "cat-1.jpg" : {
+    "src": "rel/path/to/cat-1.jpg",
+    "width": "640px",
+    "height": "426px"
   },
-  cat-2.jpg : {
-    src: "rel/path/to/cat-2.jpg",
-    width: "640px",
-    height: "480px"
+  "cat-2.jpg" : {
+    "src": "rel/path/to/cat-2.jpg",
+    "width": "640px",
+    "height": "480px"
   }
 }
 ```
@@ -77,17 +76,17 @@ The entry template is the base template file you want to render.
 
 **index.js.html**
 ```html
-const infoBox = require('./templates/infobox.js.html');
+const infoBox = require('./templates/infoBox.js.html');
 module.exports = (d,i) => `
 <!DOCTYPE html>
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
   <link rel="stylesheet" href="styles.css">
-  <title>Our friend ${d.name}</title>
+  <title>${d.title}</title>
 </head>
 <body>
-  ${infoBox(d,i)}
+  ${d.cats.map(info => infoBox(info,i,info.image)).join('')}
 </main>
 </body>
 </html>`
@@ -95,13 +94,26 @@ module.exports = (d,i) => `
 
 **infoBox.js.html**
 ```html
-const image(i,fp) => `<img src="${i[fp].src}" width="${i[fp].width}" height="${i[fp].height}"/>`
-module.exports = (d,i) => `
-<ul>
-  <li>${d.name}</li>
-  <li>${d.description}</li>
-  <li>${d.about}</li>
-  <li>${image(i,'cat-1.jpg')}</li>
-</ul>`
+const image = (i,fp) => `<img src="${i[fp].src}" width="${i[fp].width}" height="${i[fp].height}"/>`
+module.exports = (d,i,img) => `
+<section>
+  <h1>${d.name}</h1>
+  <p>
+    <strong>description:</strong>
+    ${d.description}</p>
+  <p>
+    <strong>about:</strong>
+    ${d.about}
+  </p>
+  ${image(i,img)}
+</section>`
 ```
 As seen above, if a template wants to use another template all it has to do is import it b/c everything is JS.
+
+## how to use
+
+I haven't uploaded Swift-pig to a package manager yet so if you want to use it locally run the following in terminal:
+
+`$ git clone https://github.com/jzwood/swift-pig.git && cd swift-pig && yarn install && yarn link`
+
+

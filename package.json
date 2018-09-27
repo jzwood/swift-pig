@@ -1,7 +1,7 @@
 {
   "name": "swift-pig",
   "version": "1.0.0",
-  "description": "",
+  "description": "is a quick-and-dirty static templating command line utility",
   "main": "index.js",
   "dependencies": {
     "chokidar": "^2.0.4",

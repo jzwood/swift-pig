@@ -43,7 +43,7 @@ module.exports = {
 
 ## images
 
-If you provide Swift-pig with an image path it will recursively crawl it to create an image map.
+If you provide Swift-pig with a path to images it will scan the directory and create an image map.
 
 **images/**
 ```
@@ -116,6 +116,19 @@ I haven't uploaded Swift-pig to a package manager yet so if you want to use it l
 
 `$ git clone https://github.com/jzwood/swift-pig.git && cd swift-pig && yarn install && yarn link`
 
-## LICENCE
+## can swift-pig be used for server side rendering
 
-MIT
+Technically, but don't. If you want to do server side templating use an industry standard such as HandlebarsJs. Swift-pig will let you do anything that Javascript can do which means it's super easy to shoot yourself in the foot.
+
+## can swift-pig be used as a static site generator?
+
+Totally! I recommend using Swift-Pig in conjunction with [Parcel](https://parceljs.org/). Point Parcel towards the Swift-Pig output file and make this file link to JS and SASS -- Parcel will automagically bundle everything.
+
+For instance a `head` template might look like:
+```html
+module.exports = `
+<head>
+  <link type="text/css" rel="stylesheet" href="path/to/styles.scss">
+  <script type="text/javsascript" src="path/to/main.js" async></script>
+</head>`
+```
